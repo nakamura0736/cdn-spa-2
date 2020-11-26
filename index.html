@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue Router</title>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+  <script src="https://unpkg.com/http-vue-loader"></script>
+
+</head>
+<body>  
+  <div id="app">
+    <h1>Hello App!</h1>
+    <p>
+      <!-- ナビゲーションに router-link コンポーネントを使う -->
+      <!-- リンク先を `to` プロパティに指定します -->
+      <!-- デフォルトで `<router-link>` は `<a>` タグとして描画されます -->
+      <router-link to="/">Home</router-link>
+      <router-link to="/foo">Foo</router-link>
+      <router-link to="/bar">Bar</router-link>
+      <router-link to="/page1">Page 1</router-link>
+      <router-link to="/page2">Page 2</router-link>
+    </p>
+    <!-- ルートアウトレット -->
+    <!-- ルートとマッチしたコンポーネントがここへ描画されます -->
+    <router-view></router-view>
+  </div>
+  
+<script>
+// 0. モジュールシステムを使っている場合 (例: vue-cli 経由で)、Vue と VueRouter をインポートし、`Vue.use(VueRouter)` を呼び出します。
+
+// 1. ルートコンポーネントを定義します
+// 他のファイルからインポートすることもできます
+const Home = { template: '<div>This Page is Home</div>' }
+const Foo = { template: '<div>This Page is foo</div>' }
+const Bar = { template: '<div>This Page is bar</div>' }
+const Page1 = httpVueLoader('./page1.vue')
+const Page2 = httpVueLoader('./page2.vue')
+
+
+// 2. ルートをいくつか定義します
+// 各ルートは 1 つのコンポーネントとマッピングされる必要があります。
+// このコンポーネントは実際の `Vue.extend()`、
+// またはコンポーネントオプションのオブジェクトでも構いません。
+// ネストされたルートに関しては後で説明します
+const routes = [
+  { path: '/', component: Home },
+  { path: '/foo', component: Foo },
+  { path: '/bar', component: Bar },
+  // { path: '/page1', component: httpVueLoader('page1.vue') },
+  { path: '/page1', component: Page1 },
+  // { path: '/page2', component: httpVueLoader('page2.vue') }
+  { path: '/page2', component: Page2 }
+]
+
+// 3. ルーターインスタンスを作成して、ルートオプションを渡します
+// 追加のオプションをここで指定できますが、
+// この例ではシンプルにしましょう
+const router = new VueRouter({
+  routes // `routes: routes` の短縮表記
+})
+
+// 4. root となるインスタンスを作成してマウントします
+// アプリケーション全体がルーターを認知できるように、
+// ルーターをインジェクトすることを忘れないでください。
+const app = new Vue({
+  router
+}).$mount('#app')
+
+// これで開始です!
+</script>
+</body>
+</html>
